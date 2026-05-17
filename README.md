@@ -17,6 +17,8 @@ Organize, priorize e acompanhe suas tarefas em um quadro visual elegante com tem
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4.x-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Nginx](https://img.shields.io/badge/Nginx-Proxy-009639?style=for-the-badge&logo=nginx&logoColor=white)](https://nginx.org/)
 [![License](https://img.shields.io/badge/License-MIT-818cf8?style=for-the-badge)](LICENSE)
 
 </div>
@@ -133,6 +135,46 @@ Acesse **[http://localhost:3000](http://localhost:3000)** no navegador 🎉
 
 ---
 
+## 🐳 Deploy com Docker
+
+Suba o projeto inteiro com um único comando usando **Docker Compose** (Nginx + Node.js + PostgreSQL):
+
+### Pré-requisitos
+
+- [Docker](https://docs.docker.com/get-docker/) e [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Iniciar
+
+```bash
+docker compose up -d --build
+```
+
+Acesse **[http://localhost](http://localhost)** (porta 80 via Nginx) 🎉
+
+### Parar
+
+```bash
+docker compose down
+```
+
+### Parar e remover dados do banco
+
+```bash
+docker compose down -v
+```
+
+### Arquitetura Docker
+
+```
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│    Nginx     │────▶│   Node.js    │────▶│  PostgreSQL  │
+│   (porta 80) │     │  (porta 3000)│     │  (porta 5432)│
+│ reverse proxy│     │   Express    │     │    dados     │
+└──────────────┘     └──────────────┘     └──────────────┘
+```
+
+---
+
 ## 📁 Estrutura do Projeto
 
 ```
@@ -152,7 +194,16 @@ taskflow/
 │       ├── tasks.js         # API REST de tarefas
 │       └── columns.js       # API REST de colunas
 │
-├── docs/                    # Screenshots e documentação
+├── nginx/
+│   └── nginx.conf           # Configuração do Nginx
+│
+├── docker/
+│   └── init.sql             # Script de inicialização do banco
+│
+├── docs/                    # Screenshots
+├── docker-compose.yml       # Orquestração dos containers
+├── Dockerfile               # Build da imagem Node.js
+├── .dockerignore
 ├── .env                     # Variáveis de ambiente (não commitado)
 ├── .gitignore
 ├── package.json
@@ -200,6 +251,8 @@ taskflow/
 | **Backend** | Express.js | API REST e servidor estático |
 | **Banco de Dados** | PostgreSQL | Armazenamento persistente |
 | **Driver DB** | node-postgres (pg) | Conexão com PostgreSQL |
+| **Proxy** | Nginx | Reverse proxy e cache estático |
+| **Container** | Docker | Deploy e orquestração |
 | **Tipografia** | Google Fonts (Inter) | Fonte moderna e legível |
 
 </div>
